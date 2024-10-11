@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
@@ -7,7 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
     private final Map<Long, Item> items = new HashMap<>();

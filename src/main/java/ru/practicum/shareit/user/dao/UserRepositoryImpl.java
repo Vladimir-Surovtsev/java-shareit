@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.dao;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.DuplicatedDataException;
 import ru.practicum.shareit.user.model.User;
@@ -8,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
     private Long index = 0L;
