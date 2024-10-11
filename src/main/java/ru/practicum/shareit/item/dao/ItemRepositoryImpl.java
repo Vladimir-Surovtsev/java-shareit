@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.dao;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
