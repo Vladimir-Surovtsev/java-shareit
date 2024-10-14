@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private Long index = 0L;
     private final Map<Long, User> users = new HashMap<>();
