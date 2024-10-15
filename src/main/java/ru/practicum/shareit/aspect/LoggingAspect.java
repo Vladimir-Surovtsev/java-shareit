@@ -7,6 +7,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
+
 @Aspect
 @Component
 @Slf4j
@@ -18,6 +19,7 @@ public class LoggingAspect {
         log.info("Class Name :  {}", joinPoint.getSignature().getDeclaringTypeName());
         log.info("Arguments :  {}", Arrays.toString(joinPoint.getArgs()));
     }
+
     @AfterReturning(pointcut = "execution(* ru.practicum.shareit.item.ItemController.*(..)) || " +
             "execution(* ru.practicum.shareit.user.UserController.*(..))", returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
