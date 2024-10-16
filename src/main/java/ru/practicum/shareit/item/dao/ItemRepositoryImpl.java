@@ -4,78 +4,58 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepository {
     private final Map<Long, Item> items = new HashMap<>();
-    private Long index = 0L;
+    private final Map<Long, List<Item>> itemsByOwner = new HashMap<>();
+    private Long lastId = 0L;
 
     @Override
-    public Collection<Item> findAll() {
-        return items.values();
+    public Collection<Item> getAllByUsersId(long userId) {
+        return itemsByOwner.getOrDefault(userId, Collections.emptyList());
     }
 
     @Override
-    public Item create(Item item) {
-        item.setId(++index);
+    public Item add(long userId, Item item) {
+        item.setId(++lastId);
+        item.setOwnerId(userId);
+        items.put(item.getId(), item);
+        itemsByOwner.computeIfAbsent(userId, k -> new ArrayList<>()).add(item);
+        return item;
+    }
+
+    @Override
+    public Item update(Item item) {
         items.put(item.getId(), item);
         return item;
     }
 
     @Override
-    public Item update(Item newItem) {
-        Item item = items.get(newItem.getId());
-        if (newItem.getName() != null
-                && !newItem.getName().isBlank()) {
-            item.setName(newItem.getName());
+    public void delete(long userId, long itemId) {
+        if (userId == items.get(itemId).getOwnerId()) {
+            Item item = items.remove(itemId);
+            itemsByOwner.computeIfAbsent(userId, k -> new ArrayList<>()).remove(item);
+            if (itemsByOwner.get(userId).isEmpty()) {
+                itemsByOwner.remove(userId);
+            }
         }
-        if (newItem.getDescription() != null
-                && !newItem.getDescription().isBlank()) {
-            item.setDescription(newItem.getDescription());
-        }
-        if (newItem.getAvailable() != null) {
-            item.setAvailable(newItem.getAvailable());
-        }
-        return item;
     }
 
     @Override
-    public Item findItemById(Long itemId) {
-        return items.get(itemId);
+    public Optional<Item> getById(long itemId) {
+        return Optional.ofNullable(items.get(itemId));
     }
 
     @Override
-    public Collection<Item> findItemsByUserId(Long userId) {
+    public Collection<Item> getAllByText(String text) {
+        String lowerCase = text.toLowerCase();
         return items.values().stream()
-                .filter(item -> item.getOwner().equals(userId))
-                .toList();
-    }
-
-    @Override
-    public boolean isItemExist(Long itemId) {
-        return items.containsKey(itemId);
-    }
-
-    @Override
-    public void delete(Long itemId) {
-        items.remove(itemId);
-    }
-
-    @Override
-    public boolean isOwner(Long userId, Long itemId) {
-        return items.get(itemId).getOwner().equals(userId);
-    }
-
-    @Override
-    public Collection<Item> findItemsByText(String text) {
-        return items.values().stream()
-                .filter(item -> (item.getName().toLowerCase().contains(text.toLowerCase())
-                        || item.getDescription().toLowerCase().contains(text.toLowerCase()))
-                        && item.getAvailable().equals(true))
-                .toList();
+                .filter(item -> (item.getName().toLowerCase().contains(lowerCase) ||
+                        item.getDescription().toLowerCase().contains(lowerCase)) && item.getAvailable())
+                .collect(Collectors.toList());
     }
 }

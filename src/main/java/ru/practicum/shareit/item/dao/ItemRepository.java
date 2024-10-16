@@ -3,23 +3,18 @@ package ru.practicum.shareit.item.dao;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface ItemRepository {
-    Collection<Item> findAll();
+    Collection<Item> getAllByUsersId(long userId);
 
-    Item create(Item item);
+    Item add(long userId, Item item);
 
     Item update(Item item);
 
-    Item findItemById(Long itemId);
+    void delete(long userId, long itemId);
 
-    Collection<Item> findItemsByUserId(Long userId);
+    Optional<Item> getById(long itemId);
 
-    boolean isItemExist(Long itemId);
-
-    void delete(Long itemId);
-
-    boolean isOwner(Long userId, Long itemId);
-
-    Collection<Item> findItemsByText(String text);
+    Collection<Item> getAllByText(String text);
 }

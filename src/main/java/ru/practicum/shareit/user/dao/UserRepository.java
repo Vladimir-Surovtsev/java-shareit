@@ -3,19 +3,18 @@ package ru.practicum.shareit.user.dao;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface UserRepository {
-    Collection<User> findAll();
+    Collection<User> getAll();
+
+    Optional<User> getById(long userId);
 
     User create(User user);
 
-    User update(User user);
+    User update(long userId, User user);
 
-    User findUserById(Long userId);
+    void delete(long userId);
 
-    boolean isUserEmailExist(String email);
-
-    boolean isUserExist(Long userId);
-
-    void delete(Long userId);
+    void existsByEmail(String newEmail, String oldEmail);
 }
