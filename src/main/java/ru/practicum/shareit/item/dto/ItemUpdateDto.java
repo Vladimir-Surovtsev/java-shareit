@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ItemDto {
-    private Long id;
+public class ItemUpdateDto {
     private String name;
     private String description;
     private Boolean available;
