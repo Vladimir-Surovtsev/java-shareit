@@ -1,9 +1,7 @@
 package ru.practicum.shareit.exception;
 
-import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,17 +13,10 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+    @ExceptionHandler({IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage handleMethodArgumentNotValidException(final Exception e) {
         log.info("400: Validation error: {}", e.getMessage());
-        return new ErrorMessage(e.getMessage());
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class})
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorMessage handleIllegalArgumentException(final Exception e) {
-        log.info("409: {}", e.getMessage());
         return new ErrorMessage(e.getMessage());
     }
 
