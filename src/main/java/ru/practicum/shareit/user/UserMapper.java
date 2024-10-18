@@ -4,7 +4,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.model.User;
 
 @Mapper
@@ -14,6 +13,4 @@ public interface UserMapper {
     UserDto toUserDto(User user);
 
     User toUser(UserCreateDto userCreateDto);
-
-    User toUser(UserUpdateDto userUpdateDto);
 }
