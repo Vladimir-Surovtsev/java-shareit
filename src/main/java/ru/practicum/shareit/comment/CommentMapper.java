@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface CommentMapper {
     CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+
     default CommentDto toCommentDto(Comment comment) {
         return CommentDto.builder()
                 .id(comment.getId())
