@@ -68,9 +68,11 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDto updateStatus(Long ownerId, Long bookingId, boolean approved) {
-        if (!userRepository.existsById(ownerId)) {
-            throw new ValidationException(String.format("Некорректный id пользователя: %d.", ownerId));
-        }
+        userRepository.findById(ownerId)
+                .orElseThrow(() -> {
+                    log.info("Пользователь с id={} не найден", ownerId);
+                    return new ValidationException("Пользователя с id=" + ownerId + " не существует");
+                });
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> {
                     log.info("UPDATE-BOOKING-STATUS Аренды с id={} не найден", bookingId);
