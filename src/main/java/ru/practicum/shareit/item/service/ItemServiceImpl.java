@@ -1,24 +1,23 @@
 package ru.practicum.shareit.item.service;
 
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingForItemDto;
-import ru.practicum.shareit.booking.BookingMapper;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.comment.CommentDto;
-import ru.practicum.shareit.comment.CommentMapper;
-import ru.practicum.shareit.comment.Comment;
+import ru.practicum.shareit.comment.dto.CommentDto;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
+import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemInfoDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
-import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -30,9 +29,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -54,18 +53,18 @@ public class ItemServiceImpl implements ItemService {
     public ItemInfoDto getById(long userId, long itemId) {
         checkUserExistence(userId);
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> {
-                    log.info("GET-ITEM-BY-ID Предмет с id={} не найден", itemId);
-                    return new NotFoundException("Предмета с id=" + itemId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
         List<Booking> lastBookings = bookingRepository.findLastBookingsByItemId(itemId);
         BookingForItemDto lastBooking = lastBookings.isEmpty() ? null :
                 BookingMapper.INSTANCE.toBookingForItemDto(lastBookings.getFirst());
+
         List<Booking> upcomingBookings = bookingRepository.findUpcomingBookingsByItemId(itemId);
         BookingForItemDto nextBooking = upcomingBookings.isEmpty() ? null :
                 BookingMapper.INSTANCE.toBookingForItemDto(upcomingBookings.getFirst());
+
         Collection<CommentDto> comments = commentRepository.findAllByItemId(itemId).stream()
                 .map(CommentMapper.INSTANCE::toCommentDto).collect(Collectors.toList());
+
         return ItemMapper.INSTANCE.toItemInfoDto(item, lastBooking, nextBooking, userId, comments);
     }
 
@@ -73,10 +72,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public ItemDto create(long userId, ItemCreateDto itemCreateDto) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("CREATE-ITEM Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
         Item item = ItemMapper.INSTANCE.toItem(itemCreateDto);
         item.setOwner(user);
         return ItemMapper.INSTANCE.toItemDto(itemRepository.save(item));
@@ -87,10 +83,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto update(long userId, long itemId, ItemUpdateDto itemUpdateDto) {
         checkUserExistence(userId);
         Item updatedItem = itemRepository.findById(itemId)
-                .orElseThrow(() -> {
-                    log.info("UPDATE-ITEM Предмет с id={} не найден", itemId);
-                    return new NotFoundException("Предмета с id=" + itemId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
         if (userId != (updatedItem.getOwner().getId())) {
             throw new NotFoundException("The user's ID is different from the owner's ID");
         }
@@ -130,17 +123,12 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public CommentDto addComment(long itemId, long userId, CommentDto commentDto) {
         User author = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("ADD-COMMENT Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
         Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> {
-                    log.info("ADD-COMMENT Предмет с id={} не найден", itemId);
-                    return new NotFoundException("Предмета с id=" + itemId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
 
         List<Booking> endedBookings = bookingRepository.findLastBookingsByItemId(itemId);
+
         for (Booking booking : endedBookings) {
             if (booking.getBooker().getId().equals(userId)) {
                 Comment comment = Comment.builder()
@@ -152,22 +140,17 @@ public class ItemServiceImpl implements ItemService {
                 return CommentMapper.INSTANCE.toCommentDto(commentRepository.save(comment));
             }
         }
-        throw new ValidationException("Вы не можете оставить отзыв на данный предмет.");
+
+        throw new IllegalArgumentException("Вы не можете оставить отзыв на данный предмет.");
     }
 
-    private void checkUserExistence(Long userId) {
+    private void checkUserExistence(long userId) {
         userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
     }
 
-    private void checkItemExistence(Long itemId) {
+    private void checkItemExistence(long itemId) {
         itemRepository.findById(itemId)
-                .orElseThrow(() -> {
-                    log.info("Предмет с id={} не найден", itemId);
-                    return new NotFoundException("Предмета с id=" + itemId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
     }
 }

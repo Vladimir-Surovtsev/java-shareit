@@ -1,4 +1,4 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

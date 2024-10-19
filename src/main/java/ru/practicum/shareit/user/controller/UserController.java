@@ -19,6 +19,7 @@ import ru.practicum.shareit.user.service.UserService;
 import java.util.Collection;
 
 @Slf4j
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")

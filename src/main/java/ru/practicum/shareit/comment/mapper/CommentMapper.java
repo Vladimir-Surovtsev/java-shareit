@@ -1,7 +1,9 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.comment.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import ru.practicum.shareit.comment.model.Comment;
+import ru.practicum.shareit.comment.dto.CommentDto;
 
 @Mapper
 public interface CommentMapper {

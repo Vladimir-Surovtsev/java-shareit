@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -35,10 +35,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getById(long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("GET Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
         return UserMapper.INSTANCE.toUserDto(user);
     }
 
@@ -54,10 +51,7 @@ public class UserServiceImpl implements UserService {
     public UserDto update(long userId, UserUpdateDto userUpdateDto) {
 
         User userToUpdate = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("UPDATE-USER Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
 
         if (userUpdateDto.getName() != null && !userUpdateDto.getName().isBlank()
                 && userUpdateDto.getName().length() <= MAX_SIZE) {
@@ -86,11 +80,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkUserExistence(Long userId) {
+    private void checkUserExistence(long userId) {
         userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.info("Пользователь с id={} не найден", userId);
-                    return new NotFoundException("Пользователя с id=" + userId + " не существует");
-                });
+                .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
     }
 }
