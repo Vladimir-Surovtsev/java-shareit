@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingDto updateStatus(Long ownerId, Long bookingId, boolean approved) {
-        checkUserExistence(ownerId, "UPDATE-BOOKING-STATUS");
+//        checkUserExistence(ownerId, "UPDATE-BOOKING-STATUS");
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> {
                     log.info("UPDATE-BOOKING-STATUS Аренды с id={} не найден", bookingId);
