@@ -14,18 +14,18 @@ import java.util.Arrays;
 @Slf4j
 public class LoggingAspect {
 
-    @Before("execution(* ru.practicum.shareit.item.controller.*(..)) || " +
-            "execution(* ru.practicum.shareit.user.controller.*(..)) ||" +
-            "execution(* ru.practicum.shareit.booking.controller.*(..))")
+    @Before("execution(* ru.practicum.shareit.item.controller(..)) || " +
+            "execution(* ru.practicum.shareit.user.controller(..)) ||" +
+            "execution(* ru.practicum.shareit.booking.controller(..))")
     public void logBefore(JoinPoint joinPoint) {
         log.info("Entering in Method :  {}", joinPoint.getSignature().getName());
         log.info("Class Name :  {}", joinPoint.getSignature().getDeclaringTypeName());
         log.info("Arguments :  {}", Arrays.toString(joinPoint.getArgs()));
     }
 
-    @AfterReturning(pointcut = "execution(* ru.practicum.shareit.item.controller.*(..)) || " +
-            "execution(* ru.practicum.shareit.user.controller.*(..)) ||" +
-            "execution(* ru.practicum.shareit.booking.controller.*(..))",
+    @AfterReturning(pointcut = "execution(* ru.practicum.shareit.item.controller(..)) || " +
+            "execution(* ru.practicum.shareit.user.controller(..)) ||" +
+            "execution(* ru.practicum.shareit.booking.controller(..))",
             returning = "result")
     public void logAfter(JoinPoint joinPoint, Object result) {
         log.info("Method Return value : {}", result);
