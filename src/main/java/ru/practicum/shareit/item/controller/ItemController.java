@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import static ru.practicum.shareit.constants.UserIdHttpHeader.USER_ID_HEADER;
+
 @Slf4j
 @Validated
 @RestController
@@ -69,6 +70,7 @@ public class ItemController {
         }
         return itemService.getAllByText(text);
     }
+
     @PostMapping("/{itemId}/comment")
     public CommentDto addComment(@RequestHeader(USER_ID_HEADER) long userId,
                                  @PathVariable long itemId, @RequestBody CommentDto commentDto) {
