@@ -51,21 +51,23 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemInfoDto getById(long userId, long itemId) {
-        checkUserExistence(userId);
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
-        List<Booking> lastBookings = bookingRepository.findLastBookingsByItemId(itemId);
-        BookingForItemDto lastBooking = lastBookings.isEmpty() ? null :
-                BookingMapper.INSTANCE.toBookingForItemDto(lastBookings.getFirst());
-
-        List<Booking> upcomingBookings = bookingRepository.findUpcomingBookingsByItemId(itemId);
-        BookingForItemDto nextBooking = upcomingBookings.isEmpty() ? null :
-                BookingMapper.INSTANCE.toBookingForItemDto(upcomingBookings.getFirst());
-
         Collection<CommentDto> comments = commentRepository.findAllByItemId(itemId).stream()
                 .map(CommentMapper.INSTANCE::toCommentDto).collect(Collectors.toList());
+        if (item.getOwner().getId().equals(userId)) {
+            List<Booking> lastBookings = bookingRepository.findLastBookingsByItemId(itemId);
+            BookingForItemDto lastBooking = lastBookings.isEmpty() ? null :
+                    BookingMapper.INSTANCE.toBookingForItemDto(lastBookings.getFirst());
 
-        return ItemMapper.INSTANCE.toItemInfoDto(item, lastBooking, nextBooking, userId, comments);
+            List<Booking> upcomingBookings = bookingRepository.findUpcomingBookingsByItemId(itemId);
+            BookingForItemDto nextBooking = upcomingBookings.isEmpty() ? null :
+                    BookingMapper.INSTANCE.toBookingForItemDto(upcomingBookings.getFirst());
+
+            return ItemMapper.INSTANCE.toItemInfoDto(item, lastBooking, nextBooking, userId, comments);
+        } else {
+            return ItemMapper.INSTANCE.toItemInfoDto(item, null, null, item.getOwner().getId(), comments);
+        }
     }
 
     @Override
