@@ -75,7 +75,7 @@ public class BookingServiceImpl implements BookingService {
                     return new NotFoundException("Аренды с id=" + bookingId + " не существует");
                 });
         if (!(booking.getItem().getOwner().getId().equals(ownerId))) {
-            throw new NotFoundException("Вы не являетесь владельцем данного предмета!");
+            throw new ValidationException("Вы не являетесь владельцем данного предмета!");
         }
         if (booking.getStatus() == BookingStatus.APPROVED) {
             throw new ValidationException("Нельзя подтвердить бронь, которая уже подтверждена.");
