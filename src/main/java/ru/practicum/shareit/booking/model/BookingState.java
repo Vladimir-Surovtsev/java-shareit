@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking.model;
 
 import jakarta.validation.ValidationException;
 
+import java.util.Arrays;
+
 public enum BookingState {
     ALL,
     CURRENT,
@@ -11,11 +13,8 @@ public enum BookingState {
     REJECTED;
 
     public static BookingState from(String state) {
-        for (BookingState bookingState : BookingState.values()) {
-            if (bookingState.name().equalsIgnoreCase(state)) {
-                return bookingState;
-            }
-        }
-        throw new ValidationException("Unknown state: " + state);
+        return Arrays.stream(BookingState.values())
+                .filter(bookingState -> bookingState.name().equals(state))
+                .findAny().orElseThrow(() -> new ValidationException("Unknown state: " + state));
     }
 }

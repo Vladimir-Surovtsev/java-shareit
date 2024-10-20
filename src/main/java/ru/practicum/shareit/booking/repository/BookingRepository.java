@@ -49,7 +49,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("SELECT b FROM Booking b " +
             "WHERE b.item.id = :itemId " +
             "AND (b.status = 'APPROVED' OR b.status = 'WAITING') " +
-            "AND (b.start < :end AND b.end > :start)")
+            "AND b.start < :end AND b.end > :start")
     List<Booking> findConflictingBookings(@Param("itemId") Long itemId, @Param("start") LocalDateTime start,
                                           @Param("end") LocalDateTime end);
 }

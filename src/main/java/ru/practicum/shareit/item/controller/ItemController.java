@@ -65,10 +65,7 @@ public class ItemController {
 
     @GetMapping("/search")
     public Collection<ItemDto> getAllByText(@RequestParam String text) {
-        if (text.isEmpty()) {
-            return Collections.emptyList();
-        }
-        return itemService.getAllByText(text);
+        return text.isEmpty() ? Collections.emptyList() : itemService.getAllByText(text);
     }
 
     @PostMapping("/{itemId}/comment")

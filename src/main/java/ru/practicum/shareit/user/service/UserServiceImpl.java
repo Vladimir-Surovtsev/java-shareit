@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<UserDto> getAll() {
         Collection<User> users = userRepository.findAll();
         return users.stream()
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getById(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));

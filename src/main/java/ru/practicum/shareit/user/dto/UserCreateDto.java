@@ -14,6 +14,6 @@ public class UserCreateDto {
     private String name;
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email can't be blank")
-    @Size(max = 30, message = "User email should be no more than 30 characters long")
+    @Size(max = 254, message = "User email should be no more than 254 characters long")
     private String email;
 }

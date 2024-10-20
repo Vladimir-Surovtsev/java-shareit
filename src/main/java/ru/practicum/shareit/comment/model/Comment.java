@@ -22,7 +22,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
-    @Column(name = "text", nullable = false)
+    @Column(name = "text_comment", nullable = false)
     private String text;
     @Column(name = "created_date", nullable = false)
     private LocalDateTime created;

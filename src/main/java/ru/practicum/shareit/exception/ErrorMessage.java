@@ -8,9 +8,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ErrorMessage {
-    String error;
-
-    String stackTrace;
+    public String error;
+    public String stackTrace;
 
     public ErrorMessage(String error) {
         this.error = error;

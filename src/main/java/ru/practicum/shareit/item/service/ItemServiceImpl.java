@@ -41,6 +41,7 @@ public class ItemServiceImpl implements ItemService {
     private static final int MAX_SIZE_DESCRIPTION = 150;
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ItemInfoDto> getAllByUsersId(long userId) {
         checkUserExistence(userId);
         return itemRepository.findAllByOwnerId(userId).stream()
@@ -50,6 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ItemInfoDto getById(long userId, long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
@@ -65,9 +67,8 @@ public class ItemServiceImpl implements ItemService {
                     BookingMapper.INSTANCE.toBookingForItemDto(upcomingBookings.getFirst());
 
             return ItemMapper.INSTANCE.toItemInfoDto(item, lastBooking, nextBooking, userId, comments);
-        } else {
-            return ItemMapper.INSTANCE.toItemInfoDto(item, null, null, item.getOwner().getId(), comments);
         }
+        return ItemMapper.INSTANCE.toItemInfoDto(item, null, null, item.getOwner().getId(), comments);
     }
 
     @Override
@@ -130,20 +131,18 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Предмета с id=" + itemId + " не существует"));
 
         List<Booking> endedBookings = bookingRepository.findLastBookingsByItemId(itemId);
+        endedBookings.stream()
+                .map(booking -> booking.getBooker().getId().equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Вы не можете оставить отзыв на данный предмет."));
 
-        for (Booking booking : endedBookings) {
-            if (booking.getBooker().getId().equals(userId)) {
-                Comment comment = Comment.builder()
-                        .text(commentDto.getText())
-                        .item(item)
-                        .author(author)
-                        .created(LocalDateTime.now())
-                        .build();
-                return CommentMapper.INSTANCE.toCommentDto(commentRepository.save(comment));
-            }
-        }
-
-        throw new IllegalArgumentException("Вы не можете оставить отзыв на данный предмет.");
+        Comment comment = Comment.builder()
+                .text(commentDto.getText())
+                .item(item)
+                .author(author)
+                .created(LocalDateTime.now())
+                .build();
+        return CommentMapper.INSTANCE.toCommentDto(commentRepository.save(comment));
     }
 
     private void checkUserExistence(long userId) {
