@@ -26,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ItemRequestServiceIntegrationTest {
-    private final ItemRequestServiceImpl itemRequestService;
-    private final ItemRequestRepository itemRequestRepository;
-    private final UserRepository userRepository;
-    private User user;
+    final ItemRequestServiceImpl itemRequestService;
+    final ItemRequestRepository itemRequestRepository;
+    final UserRepository userRepository;
+    User user;
 
     @BeforeEach
     void setUp() {

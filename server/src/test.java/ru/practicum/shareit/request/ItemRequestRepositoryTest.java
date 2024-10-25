@@ -18,12 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemRequestRepositoryTest {
-    private final ItemRequestRepository itemRequestRepository;
-    private final UserRepository userRepository;
+class ItemRequestRepositoryTest {
+    final ItemRequestRepository itemRequestRepository;
+    final UserRepository userRepository;
 
     @Test
-    public void testFindAllByRequestorId() {
+    void testFindAllByRequestorId() {
         User user = userRepository.save(User.builder()
                 .name("John")
                 .email("john@example.com")
@@ -38,7 +38,7 @@ public class ItemRequestRepositoryTest {
     }
 
     @Test
-    public void testFindAllByOrderByCreatedDesc() {
+    void testFindAllByOrderByCreatedDesc() {
         User user = userRepository.save(User.builder()
                 .name("John")
                 .email("john@example.com")

@@ -18,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ItemRepositoryTest {
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
-    private User user;
+     final ItemRepository itemRepository;
+     final UserRepository userRepository;
+     User user;
 
     @BeforeEach
     void setUp() {

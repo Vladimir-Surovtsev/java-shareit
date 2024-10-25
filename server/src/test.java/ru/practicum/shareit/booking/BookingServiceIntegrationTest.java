@@ -29,14 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class BookingServiceIntegrationTest {
-    private final BookingServiceImpl bookingService;
-    private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
-    private User user;
-    private User owner;
-    private Item item;
-    private Booking booking;
+    final BookingServiceImpl bookingService;
+    final BookingRepository bookingRepository;
+    final UserRepository userRepository;
+    final ItemRepository itemRepository;
+    User user;
+    User owner;
+    Item item;
+    Booking booking;
 
     @BeforeEach
     void setUp() {

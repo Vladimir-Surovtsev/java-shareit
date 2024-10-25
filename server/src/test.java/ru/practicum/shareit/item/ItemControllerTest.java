@@ -31,12 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ItemController.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ItemControllerTest {
-    private final MockMvc mockMvc;
+    final MockMvc mockMvc;
     @MockBean
-    private ItemService itemService;
-    private final ObjectMapper objectMapper;
-    private ItemDto itemDto;
-    private ItemInfoDto itemInfoDto;
+    ItemService itemService;
+    final ObjectMapper objectMapper;
+    ItemDto itemDto;
+    ItemInfoDto itemInfoDto;
 
     @BeforeEach
     void setUp() {

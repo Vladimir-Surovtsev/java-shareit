@@ -21,12 +21,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class BookingRepositoryTest {
-    private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
-    private User user;
-    private User owner;
-    private Item item;
+    final BookingRepository bookingRepository;
+    final UserRepository userRepository;
+    final ItemRepository itemRepository;
+    User user;
+    User owner;
+    Item item;
 
     @BeforeEach
     void setUp() {

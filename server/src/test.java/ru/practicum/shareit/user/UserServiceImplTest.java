@@ -22,10 +22,10 @@ import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @InjectMocks
-    private UserServiceImpl userService;
-    private User user;
+    UserServiceImpl userService;
+    User user;
 
     @BeforeEach
     void setUp() {

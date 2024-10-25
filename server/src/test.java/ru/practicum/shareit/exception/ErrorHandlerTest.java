@@ -20,12 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class ErrorHandlerTest {
     @MockBean
-    private ItemService itemService;
+    ItemService itemService;
     @Autowired
-    private MockMvc mockMvc;
+    MockMvc mockMvc;
 
     @Test
-    public void handleNotFound() throws Exception {
+    void handleNotFound() throws Exception {
         when(itemService.getAllByUsersId(anyLong())).thenThrow(NotFoundException.class);
         mockMvc.perform(get("/items")
                         .header("X-Sharer-User-Id", 1L))
@@ -34,7 +34,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    public void handleIllegalArgumentException() throws Exception {
+    void handleIllegalArgumentException() throws Exception {
         when(itemService.getAllByUsersId(anyLong())).thenThrow(IllegalArgumentException.class);
         mockMvc.perform(get("/items")
                         .header("X-Sharer-User-Id", 1L))
@@ -43,7 +43,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    public void handleInternalServerError() throws Exception {
+    void handleInternalServerError() throws Exception {
         when(itemService.getAllByUsersId(anyLong())).thenThrow(RuntimeException.class);
         mockMvc.perform(get("/items")
                         .header("X-Sharer-User-Id", 1L))

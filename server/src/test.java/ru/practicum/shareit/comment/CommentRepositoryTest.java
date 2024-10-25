@@ -20,11 +20,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class CommentRepositoryTest {
-    private final CommentRepository commentRepository;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
-    private Item item;
-    private User user;
+    final CommentRepository commentRepository;
+    final ItemRepository itemRepository;
+    final UserRepository userRepository;
+    Item item;
+    User user;
 
     @BeforeEach
     void setUp() {

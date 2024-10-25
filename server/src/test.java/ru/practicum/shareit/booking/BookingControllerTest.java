@@ -28,12 +28,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BookingController.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class BookingControllerTest {
-    private final MockMvc mockMvc;
+class BookingControllerTest {
+    final MockMvc mockMvc;
     @MockBean
-    private BookingService bookingService;
-    private final ObjectMapper objectMapper;
-    private BookingDto bookingDto;
+    BookingService bookingService;
+    final ObjectMapper objectMapper;
+    BookingDto bookingDto;
 
     @BeforeEach
     void setUp() {
