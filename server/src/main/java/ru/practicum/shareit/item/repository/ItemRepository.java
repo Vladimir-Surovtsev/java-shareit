@@ -17,6 +17,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "OR i.description ILIKE CONCAT('%', :text, '%'))")
     List<Item> searchByText(@Param("text") String text);
 
+    @Query("SELECT i FROM Item AS i " +
+            "WHERE(i.request.id) IN :requestIds")
+    List<Item> findByRequestId(List<Long> requestIds);
+
     void deleteByIdAndOwnerId(long userId, long itemId);
 
     List<Item> findAllByRequestId(long requestId);

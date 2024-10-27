@@ -8,6 +8,7 @@ import ru.practicum.shareit.request.dto.ItemRequestInfoDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collection;
+import java.util.List;
 
 @Mapper
 public interface ItemRequestMapper {
@@ -16,6 +17,8 @@ public interface ItemRequestMapper {
     ItemRequestDto toItemRequestDto(ItemRequest itemRequest);
 
     ItemRequest toItem(ItemRequestDto itemRequestDto);
+
+    List<ItemRequestInfoDto> toWithItemsDto(List<ItemRequest> itemRequests);
 
     default ItemRequestInfoDto toItemRequestInfoDto(ItemRequest itemRequest,
                                                     Collection<ItemForRequestDto> itemsForRequest) {

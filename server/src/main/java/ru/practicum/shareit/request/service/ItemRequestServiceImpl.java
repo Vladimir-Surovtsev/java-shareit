@@ -21,6 +21,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -47,9 +48,10 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public Collection<ItemRequestInfoDto> getAllByUserId(long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователя с id=" + userId + " не существует"));
-        return itemRequestRepository.findAllByRequestorId(userId).stream()
-                .sorted(Comparator.comparing(ItemRequest::getCreated).reversed())
-                .map(request -> getById(userId, request.getId()))
+        List<ItemRequest> requests = itemRequestRepository.findAllByRequestorId(userId);
+
+        return ItemRequestMapper.INSTANCE.toWithItemsDto(requests).stream()
+                .sorted(Comparator.comparing(ItemRequestInfoDto::getCreated).reversed())
                 .collect(Collectors.toList());
     }
 
