@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -179,7 +180,7 @@ class BookingServiceIntegrationTest {
 
     @Test
     void testUpdateStatusUserIsNotOwner() {
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(ValidationException.class, () ->
                 bookingService.updateStatus(user.getId(), booking.getId(), true)
         );
     }
